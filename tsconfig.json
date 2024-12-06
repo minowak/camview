@@ -1,5 +1,9 @@
 {
   "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./src/renderer/*"]
+    },
     "incremental": true,
     "target": "es2022",
     "module": "commonjs",
