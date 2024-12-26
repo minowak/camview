@@ -10,6 +10,9 @@ import {
 import { CameraList } from '@/components/camera-list';
 import { CountriesList } from '@/components/countries-list';
 import { useCameraStore } from '@/store/cameraStore';
+import { PlacesList } from '@/components/place-list';
+import { ManufacturerList } from '@/components/manufacturer-list';
+import { CameraDetails } from '@/components/camera-details';
 
 export const MainPage: React.FC = () => {
   const { fetchNewCameras, newCameras } = useCameraStore((state) => state);
@@ -27,9 +30,9 @@ export const MainPage: React.FC = () => {
             <EarthIcon className="size-4 mr-2" />
             Country
           </TabsTrigger>
-          <TabsTrigger value="city">
+          <TabsTrigger value="places">
             <Building2Icon className="size-4 mr-2" />
-            City
+            Places
           </TabsTrigger>
           <TabsTrigger value="manufacturer">
             <FactoryIcon className="size-4 mr-2" />
@@ -40,8 +43,17 @@ export const MainPage: React.FC = () => {
             Camera ID
           </TabsTrigger>
         </TabsList>
+        <TabsContent value="manufacturer">
+          <ManufacturerList />
+        </TabsContent>
+        <TabsContent value="places">
+          <PlacesList />
+        </TabsContent>
         <TabsContent value="country">
           <CountriesList />
+        </TabsContent>
+        <TabsContent value="cameraId">
+          <CameraDetails />
         </TabsContent>
         <TabsContent value="new">
           <CameraList

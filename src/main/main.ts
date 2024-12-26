@@ -38,6 +38,54 @@ ipcMain.on('get-countries', async (event) => {
   event.reply('get-countries', countries);
 });
 
+ipcMain.on('get-places', async (event) => {
+  console.log('getting places');
+  const places = await insecam.places;
+  event.reply('get-places', places);
+});
+
+ipcMain.on('get-manufacturers', async (event) => {
+  console.log('getting manufacturers');
+  const places = await insecam.manufacturers;
+  event.reply('get-manufacturers', places);
+});
+
+ipcMain.on('get-manufacturer-cameras', async (event, manufacturer) => {
+  console.log('getting cameras by manufacturer');
+  const cameras = await insecam.manufacturer(manufacturer);
+  let details = [];
+
+  for (let id of cameras) {
+    const d = await insecam.camera(id);
+    details.push({
+      details: d,
+      id: id,
+    });
+  }
+  event.reply('get-manufacturer-cameras', details);
+});
+
+ipcMain.on('get-camera-details', async (event, id) => {
+  console.log('getting camera details');
+  const details = await insecam.camera(id);
+  event.reply('get-camera-details', { id, details });
+});
+
+ipcMain.on('get-place-cameras', async (event, place) => {
+  console.log('getting cameras by place');
+  const cameras = await insecam.place(place);
+  let details = [];
+
+  for (let id of cameras) {
+    const d = await insecam.camera(id);
+    details.push({
+      details: d,
+      id: id,
+    });
+  }
+  event.reply('get-place-cameras', details);
+});
+
 ipcMain.on('get-country-cameras', async (event, country) => {
   console.log('getting cameras by country');
   const cameras = await insecam.country(country);

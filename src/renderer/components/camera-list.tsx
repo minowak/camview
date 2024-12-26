@@ -57,6 +57,7 @@ export const CameraList: React.FC<Props> = ({
             <TableHead>Country</TableHead>
             <TableHead>Region</TableHead>
             <TableHead>City</TableHead>
+            <TableHead>Action</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>

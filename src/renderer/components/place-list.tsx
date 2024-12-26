@@ -11,43 +11,41 @@ import { Button } from './ui/button';
 import { useCameraStore } from '@/store/cameraStore';
 import { RefreshCwIcon, SearchIcon } from 'lucide-react';
 
-export const CountriesList: React.FC = () => {
+export const PlacesList: React.FC = () => {
   const {
-    fetchCountryCameras,
-    countryCameras,
-    countries,
-    fetchCountries,
+    fetchPlaceCameras,
+    placeCameras,
+    places,
+    fetchPlaces,
     loading,
-    selectedCountry,
-    setSelectedCountry,
+    selectedPlace,
+    setSelectedPlace,
   } = useCameraStore((state) => state);
 
   useEffect(() => {
-    fetchCountries();
+    fetchPlaces();
   }, []);
 
   return (
     <div className="mt-4">
       <div className="flex gap-4 items-center">
         <Select
-          defaultValue={selectedCountry}
-          onValueChange={(country) => setSelectedCountry(country)}
+          defaultValue={selectedPlace}
+          onValueChange={(place) => setSelectedPlace(place)}
         >
           <SelectTrigger className="w-[300px]">
-            <SelectValue placeholder="Select country" />
+            <SelectValue placeholder="Select place" />
           </SelectTrigger>
           <SelectContent className="bg-white">
-            {Object.keys(countries)
-              .sort()
-              .map((country) => (
-                <SelectItem key={country} value={country}>
-                  {countries[country].country} ({countries[country].count})
-                </SelectItem>
-              ))}
+            {places.sort().map((place) => (
+              <SelectItem key={place} value={place}>
+                {place}
+              </SelectItem>
+            ))}
           </SelectContent>
         </Select>
         <Button
-          onClick={() => fetchCountryCameras(selectedCountry)}
+          onClick={() => fetchPlaceCameras(selectedPlace)}
           disabled={loading}
         >
           {loading ? (
@@ -59,8 +57,8 @@ export const CountriesList: React.FC = () => {
         </Button>
       </div>
       <CameraList
-        fetchCameras={() => fetchCountryCameras(selectedCountry)}
-        cameras={countryCameras[selectedCountry]}
+        fetchCameras={() => fetchPlaceCameras(selectedPlace)}
+        cameras={placeCameras[selectedPlace]}
       />
     </div>
   );

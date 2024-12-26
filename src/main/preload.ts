@@ -6,7 +6,12 @@ export type Channels =
   | 'ipc-example'
   | 'get-country-cameras'
   | 'get-new-cameras'
-  | 'get-countries';
+  | 'get-countries'
+  | 'get-place-cameras'
+  | 'get-places'
+  | 'get-manufacturers'
+  | 'get-manufacturer-cameras'
+  | 'get-camera-details';
 
 const electronHandler = {
   ipcRenderer: {

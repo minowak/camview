@@ -11,43 +11,43 @@ import { Button } from './ui/button';
 import { useCameraStore } from '@/store/cameraStore';
 import { RefreshCwIcon, SearchIcon } from 'lucide-react';
 
-export const CountriesList: React.FC = () => {
+export const ManufacturerList: React.FC = () => {
   const {
-    fetchCountryCameras,
-    countryCameras,
-    countries,
-    fetchCountries,
+    fetchManufacturerCameras,
+    manufacturerCameras,
+    manufacturers,
+    fetchManufacturers,
     loading,
-    selectedCountry,
-    setSelectedCountry,
+    selectedManufacturer,
+    setSelectedManufacturer,
   } = useCameraStore((state) => state);
 
   useEffect(() => {
-    fetchCountries();
+    fetchManufacturers();
   }, []);
 
   return (
     <div className="mt-4">
       <div className="flex gap-4 items-center">
         <Select
-          defaultValue={selectedCountry}
-          onValueChange={(country) => setSelectedCountry(country)}
+          defaultValue={selectedManufacturer}
+          onValueChange={(manufacturer) =>
+            setSelectedManufacturer(manufacturer)
+          }
         >
           <SelectTrigger className="w-[300px]">
-            <SelectValue placeholder="Select country" />
+            <SelectValue placeholder="Select manufacturer" />
           </SelectTrigger>
           <SelectContent className="bg-white">
-            {Object.keys(countries)
-              .sort()
-              .map((country) => (
-                <SelectItem key={country} value={country}>
-                  {countries[country].country} ({countries[country].count})
-                </SelectItem>
-              ))}
+            {manufacturers.sort().map((manufacturer) => (
+              <SelectItem key={manufacturer} value={manufacturer}>
+                {manufacturer}
+              </SelectItem>
+            ))}
           </SelectContent>
         </Select>
         <Button
-          onClick={() => fetchCountryCameras(selectedCountry)}
+          onClick={() => fetchManufacturerCameras(selectedManufacturer)}
           disabled={loading}
         >
           {loading ? (
@@ -59,8 +59,8 @@ export const CountriesList: React.FC = () => {
         </Button>
       </div>
       <CameraList
-        fetchCameras={() => fetchCountryCameras(selectedCountry)}
-        cameras={countryCameras[selectedCountry]}
+        fetchCameras={() => fetchManufacturerCameras(selectedManufacturer)}
+        cameras={manufacturerCameras[selectedManufacturer]}
       />
     </div>
   );

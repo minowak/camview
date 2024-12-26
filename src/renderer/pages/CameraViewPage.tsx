@@ -16,6 +16,7 @@ export const CameraViewPage: React.FC = () => {
         }}
       >
         <ArrowLeftIcon className="size-10" />
+        Back
       </Button>
       <iframe src={url} height="95%" width="100%"></iframe>
     </div>
