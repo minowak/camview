@@ -1,5 +1,4 @@
 import { encode as base64_encode } from 'base-64';
-import { CameraResponse } from '@/pages/MainPage';
 import { Button } from './ui/button';
 import {
   Table,
@@ -11,46 +10,36 @@ import {
   TableRow,
 } from './ui/table';
 import { useNavigate } from 'react-router-dom';
-import { useEffect, useState } from 'react';
-import { Channels } from 'src/main/preload';
+import { useEffect } from 'react';
 import { RefreshCwIcon } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { Spinner } from './spinner';
+import { CameraResponse } from '@/store/cameraStore';
+import { useCameraStore } from '@/store/cameraStore';
 
 type Props = {
-  channel: Channels;
-  args?: any;
   fetchAtStart?: boolean;
+  fetchCameras: () => Promise<void>;
+  cameras: CameraResponse[];
 };
 
 export const CameraList: React.FC<Props> = ({
-  channel,
-  args,
   fetchAtStart,
+  fetchCameras,
+  cameras,
 }) => {
   const navigate = useNavigate();
-  const [cameraList, setCameraList] = useState<CameraResponse[]>([]);
-  const [loading, setLoading] = useState(false);
-
-  const onClick = () => {
-    setLoading(true);
-    window.electron.ipcRenderer.once(channel, (response) => {
-      setCameraList(response as CameraResponse[]);
-      setLoading(false);
-    });
-    window.electron.ipcRenderer.sendMessage(channel, args);
-  };
+  const { loading } = useCameraStore((state) => state);
 
   useEffect(() => {
     if (fetchAtStart) {
-      onClick();
+      fetchCameras();
     }
   }, [fetchAtStart]);
 
   return (
     <div>
       <div className="my-4 flex justify-end">
-        <Button onClick={onClick} disabled={loading} variant="outline">
+        <Button onClick={fetchCameras} disabled={loading} variant="outline">
           <RefreshCwIcon
             className={cn('size-4 mr-2', loading ? 'animate-spin' : '')}
           />
@@ -59,7 +48,7 @@ export const CameraList: React.FC<Props> = ({
       </div>
       <Table>
         <TableCaption>
-          {cameraList?.length ? 'A list of cameras' : 'No results'}
+          {cameras?.length ? 'A list of cameras' : 'No results'}
         </TableCaption>
         <TableHeader>
           <TableRow>
@@ -71,7 +60,7 @@ export const CameraList: React.FC<Props> = ({
           </TableRow>
         </TableHeader>
         <TableBody>
-          {cameraList.map((cameraResponse) => (
+          {cameras?.map((cameraResponse) => (
             <TableRow key={'camera_' + cameraResponse.id}>
               <TableCell>{cameraResponse.id}</TableCell>
               <TableCell>

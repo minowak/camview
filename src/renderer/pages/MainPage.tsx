@@ -9,25 +9,11 @@ import {
 } from 'lucide-react';
 import { CameraList } from '@/components/camera-list';
 import { CountriesList } from '@/components/countries-list';
-
-export type CameraResponse = {
-  id: string;
-  details: {
-    id: string;
-    link: string;
-    image: string;
-    country: string;
-    region: string;
-    city: string;
-    loclat: string;
-    locllon: string;
-    zip: string;
-    timezone: string;
-    manufacturer: string;
-  };
-};
+import { useCameraStore } from '@/store/cameraStore';
 
 export const MainPage: React.FC = () => {
+  const { fetchNewCameras, newCameras } = useCameraStore((state) => state);
+
   return (
     <div>
       <TopBar />
@@ -58,7 +44,11 @@ export const MainPage: React.FC = () => {
           <CountriesList />
         </TabsContent>
         <TabsContent value="new">
-          <CameraList channel="get-new-cameras" fetchAtStart />
+          <CameraList
+            fetchCameras={fetchNewCameras}
+            cameras={newCameras}
+            fetchAtStart
+          />
         </TabsContent>
       </Tabs>
     </div>
