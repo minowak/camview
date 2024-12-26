@@ -32,9 +32,14 @@ ipcMain.on('ipc-example', async (event, arg) => {
   event.reply('ipc-example', msgTemplate('pong'));
 });
 
-ipcMain.on('get-country-cameras', async (event, arg) => {
+ipcMain.on('get-countries', async (event) => {
+  console.log('getting countries');
+  const countries = await insecam.countries;
+  event.reply('get-countries', countries);
+});
+
+ipcMain.on('get-country-cameras', async (event, country) => {
   console.log('getting cameras by country');
-  const country = 'US';
   const cameras = await insecam.country(country);
   let details = [];
 
@@ -45,8 +50,22 @@ ipcMain.on('get-country-cameras', async (event, arg) => {
       id: id,
     });
   }
-  console.log(details);
   event.reply('get-country-cameras', details);
+});
+
+ipcMain.on('get-new-cameras', async (event) => {
+  console.log('getting new cameras');
+  const cameras = await insecam.new;
+  let details = [];
+
+  for (let id of cameras) {
+    const d = await insecam.camera(id);
+    details.push({
+      details: d,
+      id: id,
+    });
+  }
+  event.reply('get-new-cameras', details);
 });
 
 if (process.env.NODE_ENV === 'production') {
