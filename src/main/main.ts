@@ -14,6 +14,7 @@ import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
 import MenuBuilder from './menu';
 import { resolveHtmlPath } from './util';
+import insecam from 'insecam-api';
 
 class AppUpdater {
   constructor() {
@@ -29,6 +30,23 @@ ipcMain.on('ipc-example', async (event, arg) => {
   const msgTemplate = (pingPong: string) => `IPC test: ${pingPong}`;
   console.log(msgTemplate(arg));
   event.reply('ipc-example', msgTemplate('pong'));
+});
+
+ipcMain.on('get-country-cameras', async (event, arg) => {
+  console.log('getting cameras by country');
+  const country = 'US';
+  const cameras = await insecam.country(country);
+  let details = [];
+
+  for (let id of cameras) {
+    const d = await insecam.camera(id);
+    details.push({
+      details: d,
+      id: id,
+    });
+  }
+  console.log(details);
+  event.reply('get-country-cameras', details);
 });
 
 if (process.env.NODE_ENV === 'production') {
